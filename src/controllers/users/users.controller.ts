@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { CreateUserDto } from 'src/dto/user.dto';
 
 interface User{
     id: number;
@@ -49,7 +50,7 @@ export class UsersController {
    }
 
    @Post()
-   create(@Body() user: User): User {
+   create(@Body() user: CreateUserDto): User {
        const newUser = { ...user, id: this.users.length + 1 };
        this.users = [...this.users, newUser];
        return newUser;
