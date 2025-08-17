@@ -1,75 +1,46 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
-import { CreateUserDto } from 'src/dto/user.dto';
-
-interface User{
-    id: number;
-    name: string;
-    email: string;
-}
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+} from '@nestjs/common';
+import { CreateUserDto, UpdateUserDTO } from 'src/dto/user.dto';
+import { User } from 'src/models/user.model';
+import { UserService } from 'src/services/user/user.service';
 
 @Controller('users')
 export class UsersController {
-    private users: User[] = [
-        {
-            id: 1,
-            name: 'John Doe',
-            email: 'john.doe@example.com'
-        },
-        {
-            id: 2,
-            name: 'Jane Smith',
-            email: 'jane.smith@example.com'
-        },
-        {
-            id: 3,
-            name: 'Alice Johnson',
-            email: 'alice.johnson@example.com'
-        },
-        {
-            id: 4,
-            name: 'Salvador Alejandro Saavedra Gomez',
-            email: 'salvador.saavedra@example.com'
-        },
-        {
-            id: 5,
-            name: 'Marcos Josue Saavedra Gomez',
-            email: 'marcos.saavedra@example.com'
-        }
-    ];
+  constructor(private readonly userService: UserService) {}
 
-   @Get('all')
-   findAll(): User[] {
-       return this.users;
-   }
+  @Get('all')
+  findAll(): User[] {
+    return this.userService.findAll();
+  }
 
-   @Get(':id')
-   findOne(@Param('id', ParseIntPipe) id: number): User {
-       const findUser = this.users.find(user => user.id === id);
-       if(!findUser) throw new NotFoundException(`User with id ${id} not found`);
-       return findUser;
-   }
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: number): User {
+    return this.userService.findOne(id);
+  }
 
-   @Post()
-   create(@Body() user: CreateUserDto): User {
-       const newUser = { ...user, id: this.users.length + 1 };
-       this.users = [...this.users, newUser];
-       return newUser;
-   }
+  @Post()
+  create(@Body() user: CreateUserDto): User {
+    return this.userService.create(user);
+  }
 
-   @Delete(':id')
-   remove(@Param('id', ParseIntPipe) id: number): boolean {
-       const findUser = this.users.find(user => user.id === id);
-       if(!findUser) throw new NotFoundException(`User with id ${id} not found`);
-       this.users = this.users.filter(user => user.id !== id);
-       return true;
-   }
+  @Delete(':id')
+  remove(@Param('id', ParseIntPipe) id: number): boolean {
+    return this.userService.remove(id);
+  }
 
-    @Put(':id')
-    update(@Param('id', ParseIntPipe) id: number, @Body() user: User): User {
-        const index = this.users.findIndex(user => user.id === id);
-        if(index === -1) throw new NotFoundException(`User with id ${id} not found`);
-        this.users = this.users.map(item => item.id === id ? { ...item, ...user, id } : item);
-        
-        return this.users[index];
-    }
+  @Put(':id')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() user: UpdateUserDTO,
+  ): User {
+    return this.userService.update(id, user);
+  }
 }
