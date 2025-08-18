@@ -1,12 +1,8 @@
 import { Module } from '@nestjs/common';
 
-// Services
-import { AppService } from './app.service';
-import { UserService } from './services/user/user.service';
-
-// Controllers
-import { UsersController } from './controllers/users/users.controller';
+// Modules
 import { ConfigModule } from '@nestjs/config';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -14,8 +10,9 @@ import { ConfigModule } from '@nestjs/config';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    UserModule,
   ],
-  controllers: [UsersController],
-  providers: [AppService, UserService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
