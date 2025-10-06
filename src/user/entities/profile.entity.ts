@@ -1,22 +1,36 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity({ name: 'profiles' })
-export class Profile {    
-    @PrimaryGeneratedColumn()
-    id: number;
+export class Profile {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ type: "varchar", length: 100 })
-    name: string;
+  @Column({ type: 'varchar', length: 100 })
+  name: string;
 
-    @Column({ type: "varchar", length: 100, name: "last_name" })
-    lastName: string;
+  @Column({ type: 'varchar', length: 100, name: 'last_name' })
+  lastName: string;
 
-    @Column({ type: "varchar", length: 255, nullable: true })
-    avatar: string;
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  avatar: string;
 
-    @CreateDateColumn({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP", name: "created_at" })
-    createdAt: Date;
+  @CreateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+    name: 'created_at',
+  })
+  createdAt: Date;
 
-    @UpdateDateColumn({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP", name: "updated_at" })
-    updatedAt: Date;
+  @UpdateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+    name: 'updated_at',
+  })
+  updatedAt: Date;
 }

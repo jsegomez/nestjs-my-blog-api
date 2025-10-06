@@ -3,7 +3,10 @@ import {
   IsEmail,
   IsNotEmpty,
   IsOptional,
-  IsString, IsStrongPassword, ValidateNested } from 'class-validator';
+  IsString,
+  IsStrongPassword,
+  ValidateNested,
+} from 'class-validator';
 import { CreateProfileDto, UpdateProfileDto } from './profile.dto';
 import { OmitType, PartialType } from '@nestjs/mapped-types';
 
@@ -23,7 +26,9 @@ export class CreateUserDto {
   profile: CreateProfileDto;
 }
 
-export class CreateUserWithProfileDto extends OmitType(CreateUserDto, ['profile']) {}
+export class CreateUserWithProfileDto extends OmitType(CreateUserDto, [
+  'profile',
+]) {}
 
 export class UpdateUserDTO extends PartialType(CreateUserWithProfileDto) {
   @IsOptional()
@@ -31,4 +36,3 @@ export class UpdateUserDTO extends PartialType(CreateUserWithProfileDto) {
   @Type(() => UpdateProfileDto)
   profile: UpdateProfileDto;
 }
-
