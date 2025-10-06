@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EnvConfig } from 'env.model';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { EnvConfig } from 'env.model';
       }),
       inject: [ConfigService],
     }),
+    PostModule,
   ],
   controllers: [],
   providers: [],
