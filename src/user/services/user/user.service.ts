@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,32 +16,69 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  async findAll(): Promise<User[]> {
-    return await this.userRepository.find({ relations: ['profile'] });
+  async findAll(): Promise<User[] | void> {
+    try {
+      return await this.userRepository.find({ relations: ['profile'] });
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new BadRequestException({
+          message: 'Could not fetch users',
+          error: error.message,
+        });
+      }
+
+      throw new InternalServerErrorException('Could not fetch users');
+    }
   }
 
-  async findOne(id: number): Promise<User> {
-    return await this.findUserById(id);
+  async findOne(id: number): Promise<User | void> {
+    try {
+      return await this.findUserById(id);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(`User with id ${id} not found`);
+      }
+
+      if (error instanceof Error) {
+        throw new BadRequestException({
+          message: 'Could not fetch user',
+          error: error.message,
+        });
+      }
+
+      throw new InternalServerErrorException('Could not fetch user');
+    }
   }
 
-  async create(user: CreateUserDto): Promise<User> {
-    const existingUser = await this.userRepository.findOneBy({
-      email: user.email,
-    });
-    if (existingUser) throw new BadRequestException('User already exists');
+  async create(user: CreateUserDto): Promise<User | void> {
+    try {
+      const newUser = this.userRepository.create(user);
+      return await this.userRepository.save(newUser);
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new BadRequestException({
+          message: 'Could not create user',
+          error: error.message,
+        });
+      }
 
-    const newUser = this.userRepository.create(user);
-    return await this.userRepository.save(newUser);
+      throw new InternalServerErrorException('Could not create user');
+    }
   }
 
-  async update(id: number, changes: UpdateUserDTO): Promise<User> {
+  async update(id: number, changes: UpdateUserDTO): Promise<void | User> {
     try {
       const userData = await this.findUserById(id);
       this.userRepository.merge(userData, changes);
 
       return await this.userRepository.save(userData);
     } catch (error) {
-      throw new BadRequestException('Error updating user');
+      if (error instanceof Error) {
+        throw new BadRequestException({
+          message: 'Could not update user',
+          error: error.message,
+        });
+      }
     }
   }
 

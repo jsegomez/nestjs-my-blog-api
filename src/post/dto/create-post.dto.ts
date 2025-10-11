@@ -22,9 +22,8 @@ export class CreatePostDto {
   authorId: number;
 
   @IsString()
-  @IsOptional()
   @MaxLength(255)
-  coverImage?: string;
+  coverImage: string;
 
   @IsBoolean()
   @IsOptional()

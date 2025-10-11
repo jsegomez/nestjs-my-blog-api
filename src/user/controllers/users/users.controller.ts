@@ -17,17 +17,17 @@ export class UsersController {
   constructor(private readonly userService: UserService) {}
 
   @Get('all')
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<User[] | void> {
     return await this.userService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number): Promise<User> {
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<User | void> {
     return await this.userService.findOne(id);
   }
 
   @Post()
-  async create(@Body() user: CreateUserDto): Promise<User> {
+  async create(@Body() user: CreateUserDto): Promise<User | void> {
     return await this.userService.create(user);
   }
 
@@ -40,7 +40,7 @@ export class UsersController {
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() user: UpdateUserDTO,
-  ): Promise<User> {
+  ): Promise<User | void> {
     return await this.userService.update(id, user);
   }
 }

@@ -14,6 +14,7 @@ import { PostModule } from './post/post.module';
       envFilePath: '.env',
     }),
     UserModule,
+    PostModule,
     TypeOrmModule.forRootAsync({
       useFactory: (config: ConfigService<EnvConfig>) => ({
         type: 'postgres',
@@ -27,7 +28,6 @@ import { PostModule } from './post/post.module';
       }),
       inject: [ConfigService],
     }),
-    PostModule,
   ],
   controllers: [],
   providers: [],
