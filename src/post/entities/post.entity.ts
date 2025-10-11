@@ -1,7 +1,10 @@
+import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -17,14 +20,15 @@ export class Post {
   @Column({ type: 'text', default: '' })
   content: string;
 
-  @Column({ type: 'int', nullable: false, name: 'author_id' })
-  authorId: number;
-
   @Column({ type: 'varchar', length: 255 })
   coverImage: string;
 
   @Column({ type: 'boolean', default: true, name: 'is_draft' })
   isDraft: boolean;
+
+  @ManyToOne(() => User, (user) => user.posts, { nullable: false })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
   @CreateDateColumn({
     type: 'timestamptz',

@@ -3,8 +3,8 @@ import {
   IsNotEmpty,
   IsOptional,
   IsBoolean,
-  IsNumber,
   MaxLength,
+  IsNumber,
 } from 'class-validator';
 
 export class CreatePostDto {
@@ -17,10 +17,6 @@ export class CreatePostDto {
   @IsOptional()
   content?: string;
 
-  @IsNumber()
-  @IsNotEmpty()
-  authorId: number;
-
   @IsString()
   @MaxLength(255)
   coverImage: string;
@@ -28,4 +24,8 @@ export class CreatePostDto {
   @IsBoolean()
   @IsOptional()
   isDraft?: boolean;
+
+  @IsNotEmpty()
+  @IsNumber()
+  userId: number;
 }
